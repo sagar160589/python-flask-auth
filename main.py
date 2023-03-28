@@ -6,9 +6,14 @@ import os
 from models import db, login_manager, User
 
 app = Flask(__name__)
-
+db_url = os.environ.get('DB_URL')
+DATABASE_URL = db_url.replace(
+    'postgres://',
+    'postgresql://',
+    1
+)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
