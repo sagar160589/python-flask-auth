@@ -57,9 +57,18 @@ def login():
         password = request.form['password']
 
         user = User.query.filter_by(email=email).first()
-        if check_password_hash(user.password,password):
-            login_user(user)
-            return redirect(url_for('secrets'))
+        if user:
+            if check_password_hash(user.password, password):
+                login_user(user)
+                return redirect(url_for('secrets'))
+            else:
+                flash('Invalid username/password. Please try again!')
+                return redirect(url_for('login'))
+
+        else:
+            flash('User does not exist. Please register!')
+            return redirect(url_for('login'))
+
     return render_template("login.html")
 
 
